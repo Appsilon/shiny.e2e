@@ -1,0 +1,8 @@
+config_name <- "config.yaml"
+test_env_script <- "test_env.R"
+settings_script <- "run_settings.json"
+default_config_dir <- "tests/end2end/app"
+scenarios_list_file <- "scenarios.json"
+default_test_dir <- "tests/end2end"
+default_port <- "8888"
+node_modules_dir <- "node_modules"
