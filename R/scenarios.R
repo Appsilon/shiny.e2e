@@ -116,10 +116,10 @@ run_scenarios <- function(label = NULL, action = "test", app_path = "app.R", por
 
   source_env <- ""
   if (file.exists(config$test_env)) {
-    source_env <- glue::glue("source({config$test_env});")
+    source_env <- glue::glue("source('{config$test_env}');")
   }
 
-  if (!is.null(app_url)) {
+  if (!is.null(app_path)) {
     message(glue::glue("Running app locally on port: {port}"))
     pid_file <- tempfile("pid")
     file.create(pid_file)
