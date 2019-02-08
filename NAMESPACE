@@ -2,7 +2,6 @@
 
 export(define_scenario)
 export(edit_scenario)
-export(edit_test_env)
 export(make_structure)
 export(run_scenarios)
 importFrom(magrittr,"%>%")

@@ -6,7 +6,6 @@ prepare_config <- function(id, dir, env_script, settings) {
   dir.create(file.path(dir, id, "report/html_report"), showWarnings = FALSE, recursive = TRUE)
   dir.create(file.path(dir, id, "report/ci_report"), showWarnings = FALSE, recursive = TRUE)
   file.copy(system.file(scenarios_list_file, package = "end2end"), file.path(dir, id, scenarios_list_file))
-  file.copy(system.file(node_modules_dir, package = "end2end"), file.path(dir, id), recursive = TRUE)
   if (settings) {
     file.create(file.path(dir, id, settings_script), showWarnings = FALSE)
   }
@@ -25,6 +24,12 @@ update_action <- function(dir) {
   file.copy(system.file("action.js", package = "end2end"), dir)
 }
 
+#' Create structure for tests
+#'
+#' @param dir Directory in which structure should be created
+#' @param id Subdirectory of dir. dir/id is the final directory for tests structure.
+#' @param env_script If TRUE, then empty R script for setting local Shiny App environment is created. Not used yet.
+#' @param settings If TRUE, then settings template for browser and test environment is created. Not used yet.
 #' @export
 make_structure <- function(dir = "tests/end2end", id = "app", env_script = FALSE,
                            settings = FALSE) {
