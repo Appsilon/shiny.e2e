@@ -127,7 +127,9 @@ run_scenarios <- function(label = NULL, action = "test", app_path = "app.R", por
       sprintf("Rscript -e \"%s shiny::runApp('%s', port = %s)\" & echo $! > %s", source_env, app_path, port, pid_file),
       wait = FALSE)
     pid <- readLines(pid_file)
-    print(pid)
+    print(glue::glue("Shiny process PID: {pid}"))
+    print("Give application time to run..")
+    Sys.sleep(30)
   }
 
   reference_filter = ""
