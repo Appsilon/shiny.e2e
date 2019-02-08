@@ -114,12 +114,17 @@ run_scenarios <- function(label = NULL, action = "test", app_path = "app.R", por
   params$action <- NULL
   params$app_path <- NULL
 
+  source_env <- ""
+  if (file.exists(config$test_env)) {
+    source_env <- glue::glue("source({config$test_env});")
+  }
+
   if (!is.null(app_url)) {
     message(glue::glue("Running app locally on port: {port}"))
     pid_file <- tempfile("pid")
     file.create(pid_file)
     system(
-      sprintf("Rscript -e \"shiny::runApp('%s', port = %s)\" & echo $! > %s", app_path, port, pid_file),
+      sprintf("Rscript -e \"%s shiny::runApp('%s', port = %s)\" & echo $! > %s", source_env, app_path, port, pid_file),
       wait = FALSE)
     pid <- readLines(pid_file)
     print(pid)
