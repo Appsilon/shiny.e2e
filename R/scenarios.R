@@ -131,7 +131,7 @@ run_scenarios <- function(label = NULL, action = "test", app_path = "app.R", por
   }
 
   reference_filter = ""
-  if (action == "reference") {
+  if (action == "reference" && (length(label) == 1)) {
     reference_filter <- glue::glue("--filter={label}")
   }
 
