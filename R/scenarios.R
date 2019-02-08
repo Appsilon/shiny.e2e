@@ -69,7 +69,7 @@ edit_scenario <- function(label, config_dir = getOption("config_dir", default = 
 
 #' Perform test or create reference screenshot
 #'
-#' @param label Scenario id.
+#' @param label Scenario id. If NULL then all defined scenarios are used.
 #' @param action "test" for performing test (default), "reference" for creating reference screenshot
 #' @param app_path Relative path for Shiny App directory (used only for scenarios testing local app)
 #' @param port Port in which local Shiny App should be run.
