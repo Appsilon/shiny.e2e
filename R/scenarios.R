@@ -45,7 +45,7 @@ define_scenario <- function(label, config_dir = getOption("config_dir", default 
 make_engine_script <- function(label, config_dir = getOption("config_dir", default = default_config_dir)) {
   config <- yaml::read_yaml(glue::glue("{config_dir}/{config_name}"))
   scenario_path <- glue::glue("{config$dir}/engine_scripts/{label}.js")
-  file.copy(system.file("scenario_template.js", package = "end2end"), scenario_path)
+  file.copy(system.file("scenario_template.js", package = "shiny.e2e"), scenario_path)
   file.edit(scenario_path)
 }
 

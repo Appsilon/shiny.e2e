@@ -5,7 +5,7 @@ prepare_config <- function(id, dir, env_script, settings) {
   dir.create(file.path(dir, id, "test_screenshots"), showWarnings = FALSE, recursive = TRUE)
   dir.create(file.path(dir, id, "report/html_report"), showWarnings = FALSE, recursive = TRUE)
   dir.create(file.path(dir, id, "report/ci_report"), showWarnings = FALSE, recursive = TRUE)
-  file.copy(system.file(scenarios_list_file, package = "end2end"), file.path(dir, id, scenarios_list_file))
+  file.copy(system.file(scenarios_list_file, package = "shiny.e2e"), file.path(dir, id, scenarios_list_file))
   if (settings) {
     file.create(file.path(dir, id, settings_script), showWarnings = FALSE)
   }
@@ -21,7 +21,7 @@ prepare_config <- function(id, dir, env_script, settings) {
 }
 
 update_action <- function(dir) {
-  file.copy(system.file("action.js", package = "end2end"), dir)
+  file.copy(system.file("action.js", package = "shiny.e2e"), dir)
 }
 
 #' Create structure for tests
