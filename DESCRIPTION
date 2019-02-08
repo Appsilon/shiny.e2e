@@ -1,4 +1,4 @@
-Package: end2end
+Package: shiny.e2e
 Title: End To End Tests Shiny Applications
 Version: 0.0.0.9000
 Authors@R: 
