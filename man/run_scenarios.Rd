@@ -6,14 +6,15 @@
 \usage{
 run_scenarios(label = NULL, action = "test", app_path = "app.R",
   port = default_port, config_dir = getOption("config_dir", default =
-  default_config_dir), viewports = list(list(name = "mac_screen", width =
-  1920, height = 1080)), asyncCaptureLimit = 5, engineFlags = list(),
+  default_config_dir), display_report = FALSE, run_time = 30,
+  viewports = list(list(name = "mac_screen", width = 1920, height =
+  1080)), asyncCaptureLimit = 5, engineFlags = list(),
   engine = "puppeteer", engineOptions = list(ignoreHTTPSErrors = TRUE,
   headless = TRUE, args = list("--no-sandbox",
   "--disable-setuid-sandbox")), report = list("CI"), debug = FALSE)
 }
 \arguments{
-\item{label}{Scenario id.}
+\item{label}{Scenario id. If NULL then all defined scenarios are used.}
 
 \item{action}{"test" for performing test (default), "reference" for creating reference screenshot}
 
@@ -23,7 +24,11 @@ run_scenarios(label = NULL, action = "test", app_path = "app.R",
 
 \item{config_dir}{Relative path to structure config file (config.yaml) directory.}
 
+\item{run_time}{Time in seconds needed for application run.}
+
 \item{viewports, asyncCaptureLimit, engineFlags, engineOptions, report, debug}{Parameters specifying browser and test environment. Check https://github.com/garris/BackstopJS for details.}
+
+\item{dosplay_report}{If TRUE, test report will be opened.}
 }
 \description{
 Perform test or create reference screenshot

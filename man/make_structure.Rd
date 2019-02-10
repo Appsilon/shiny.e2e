@@ -12,7 +12,7 @@ make_structure(dir = "tests/end2end", id = "app", env_script = FALSE,
 
 \item{id}{Subdirectory of dir. dir/id is the final directory for tests structure.}
 
-\item{env_script}{If TRUE, then empty R script for setting local Shiny App environment is created. Not used yet.}
+\item{env_script}{If TRUE, then empty R script for setting local Shiny App environment is created.}
 
 \item{settings}{If TRUE, then settings template for browser and test environment is created. Not used yet.}
 }

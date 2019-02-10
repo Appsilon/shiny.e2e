@@ -1,7 +1,13 @@
-#' (todo)
+#' Edit shiny environment file
+#'
+#' @description While testing local shiny app, you may want to run it on separate environment.
+#'    The function opens the file responsible for setting up environment - you can include here
+#'    required options and environment variables that are used during run_scenario function run.
+#' @param config_dir Relative path to structure config file (config.yaml) directory.
+#' @export
 edit_test_env <- function(config_dir = getOption("config_dir", default = default_config_dir)) {
   test_env_path <- yaml::read_yaml(glue::glue("{config_dir}/{config_name}"))$test_env
-  file.edit('test_env_path')
+  file.edit(test_env_path)
 }
 
 #' Define scenario basing on template
@@ -74,11 +80,14 @@ edit_scenario <- function(label, config_dir = getOption("config_dir", default = 
 #' @param app_path Relative path for Shiny App directory (used only for scenarios testing local app)
 #' @param port Port in which local Shiny App should be run.
 #' @param config_dir Relative path to structure config file (config.yaml) directory.
+#' @param dosplay_report If TRUE, test report will be opened.
+#' @param run_time Time in seconds needed for application run.
 #' @param viewports,asyncCaptureLimit,engineFlags,engineOptions,report,debug
 #'    Parameters specifying browser and test environment. Check https://github.com/garris/BackstopJS for details.
 #' @export
 run_scenarios <- function(label = NULL, action = "test", app_path = "app.R", port = default_port,
                           config_dir = getOption("config_dir", default = default_config_dir),
+                          display_report = FALSE, run_time = 30,
                           viewports = list(list(name = "mac_screen", width = 1920, height = 1080)),
                           asyncCaptureLimit = 5,
                           engineFlags = list(), engine = "puppeteer",
@@ -127,9 +136,9 @@ run_scenarios <- function(label = NULL, action = "test", app_path = "app.R", por
       sprintf("Rscript -e \"%s shiny::runApp('%s', port = %s)\" & echo $! > %s", source_env, app_path, port, pid_file),
       wait = FALSE)
     pid <- readLines(pid_file)
-    print(glue::glue("Shiny process PID: {pid}"))
-    print("Give application time to run..")
-    Sys.sleep(30)
+    message(glue::glue("Shiny process PID: {pid}"))
+    message("Give application time to run..")
+    Sys.sleep(run_time)
   }
 
   reference_filter = ""
@@ -142,6 +151,16 @@ run_scenarios <- function(label = NULL, action = "test", app_path = "app.R", por
   system(glue::glue("backstop {action} --configPath={config$dir}/config.js {reference_filter}"), wait = TRUE)
   system(sprintf("kill -9 %s", pid))
 
+  if (display_report && action == "test") {
+    open_report(config$dir)
+  }
+
+}
+#' Open test report
+#'
+#' @param config_dir Relative path to structure config file (config.yaml) directory.
+#' @export
+open_report <- function(config_dir) {
   if (R.version$os == "msys") {
     start_browser <- "start"
   } else {
@@ -149,6 +168,6 @@ run_scenarios <- function(label = NULL, action = "test", app_path = "app.R", por
   }
 
   if (action == "test") {
-    system(glue::glue("{start_browser} {config$dir}/report/html_report/index.html"))
+    system(glue::glue("{start_browser} {config_dir}/report/html_report/index.html"))
   }
 }

@@ -11,6 +11,7 @@ prepare_config <- function(id, dir, env_script, settings) {
   }
   if (env_script) {
     file.create(file.path(dir, id, test_env_script), showWarnings = FALSE)
+    edit_test_env(file.path(dir, id))
   }
   options("config_dir" = glue::glue("{dir}/{id}"))
   yaml::write_yaml(
@@ -28,7 +29,7 @@ update_action <- function(dir) {
 #'
 #' @param dir Directory in which structure should be created
 #' @param id Subdirectory of dir. dir/id is the final directory for tests structure.
-#' @param env_script If TRUE, then empty R script for setting local Shiny App environment is created. Not used yet.
+#' @param env_script If TRUE, then empty R script for setting local Shiny App environment is created.
 #' @param settings If TRUE, then settings template for browser and test environment is created. Not used yet.
 #' @export
 make_structure <- function(dir = "tests/end2end", id = "app", env_script = FALSE,
