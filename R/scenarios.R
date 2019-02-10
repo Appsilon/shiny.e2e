@@ -167,7 +167,5 @@ open_report <- function(config_dir) {
     start_browser <- "xdg-open"
   }
 
-  if (action == "test") {
-    system(glue::glue("{start_browser} {config_dir}/report/html_report/index.html"))
-  }
+  system(glue::glue("{start_browser} {config_dir}/report/html_report/index.html"))
 }
