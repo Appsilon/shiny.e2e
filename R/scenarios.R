@@ -19,7 +19,7 @@ edit_test_env <- function(config_dir = getOption("config_dir", default = default
 #'    Other parameters defining scenario. Please check https://github.com/garris/BackstopJS for details.
 #' @export
 define_scenario <- function(label, config_dir = getOption("config_dir", default = default_config_dir),
-                            url = glue::glue("http://127.0.0.1:{default_port}"), onBeforeScript = NULL,
+                            onBeforeScript = NULL,
                             cookiePath = NULL, referenceUrl = NULL, readyEvent = NULL, readySelector = NULL,
                             delay = 1000, hideSelectors = NULL, removeSelectors = list(), onReadyScript = NULL,
                             keyPressSelectors = NULL, hoverSelector = NULL, hoverSelectors = NULL,
@@ -90,7 +90,6 @@ run_scenarios <- function(label = NULL,
                           action = "test",
                           app_path = "app.R",
                           port = default_port,
-                          app_url = NULL,
                           config_dir = getOption("config_dir", default = default_config_dir),
                           display_report = FALSE, run_time = 30,
                           viewports = list(list(name = "mac_screen", width = 1920, height = 1080)),
@@ -116,14 +115,22 @@ run_scenarios <- function(label = NULL,
 
   scenarios <- jsonlite::fromJSON(glue::glue("{config$dir}/{scenarios_list_file}"), simplifyVector = FALSE)
 
-
-  if (!is.null(app_url)) {
-    modify_url <- function(x, url) {
-      x$url <- url
-      x
-    }
-    scenarios <- purrr::modify(scenarios, modify_url, url = app_url)
+  path_is_local <- function(path) {
+    is.null(httr::parse_url(path)$hostname)
   }
+
+  if (path_is_local(app_path)) {
+    app_url <- glue::glue("http://{ getOption('shiny.host', '127.0.0.1') }:{ port }")
+  } else {
+    app_url <- app_path
+  }
+
+  add_url <- function(x, url) {
+    x$url <- url
+    x
+  }
+  scenarios <- purrr::modify(scenarios, add_url, url = app_url)
+
 
   if (!is.null(label)) {
     scenarios <- scenarios %>%
@@ -142,7 +149,7 @@ run_scenarios <- function(label = NULL,
     source_env <- glue::glue("source('{config$test_env}');")
   }
 
-  if (!is.null(app_path)) {
+  if (path_is_local(app_path)) {
     message(glue::glue("Running app locally on port: {port}"))
     pid_file <- tempfile("pid")
     file.create(pid_file)
@@ -163,7 +170,7 @@ run_scenarios <- function(label = NULL,
   writeLines(sprintf("module.exports = %s", jsonlite::toJSON(params, pretty = TRUE, auto_unbox = TRUE)),
              con = glue::glue("{config$dir}/config.js"))
   system(glue::glue("backstop {action} --configPath={config$dir}/config.js {reference_filter}"), wait = TRUE)
-  if (!is.null(app_path)) {
+  if (path_is_local(app_path)) {
     system(sprintf("kill -9 %s", pid))
   }
 
