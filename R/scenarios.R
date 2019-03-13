@@ -79,13 +79,18 @@ edit_scenario <- function(label, config_dir = getOption("config_dir", default = 
 #' @param action "test" for performing test (default), "reference" for creating reference screenshot
 #' @param app_path Relative path for Shiny App directory (used only for scenarios testing local app)
 #' @param port Port in which local Shiny App should be run.
+#' @param app_url External url of the Shiny App
 #' @param config_dir Relative path to structure config file (config.yaml) directory.
 #' @param dosplay_report If TRUE, test report will be opened.
 #' @param run_time Time in seconds needed for application run.
 #' @param viewports,asyncCaptureLimit,engineFlags,engineOptions,report,debug
 #'    Parameters specifying browser and test environment. Check https://github.com/garris/BackstopJS for details.
 #' @export
-run_scenarios <- function(label = NULL, action = "test", app_path = "app.R", port = default_port,
+run_scenarios <- function(label = NULL,
+                          action = "test",
+                          app_path = "app.R",
+                          port = default_port,
+                          app_url = NULL,
                           config_dir = getOption("config_dir", default = default_config_dir),
                           display_report = FALSE, run_time = 30,
                           viewports = list(list(name = "mac_screen", width = 1920, height = 1080)),
@@ -110,6 +115,15 @@ run_scenarios <- function(label = NULL, action = "test", app_path = "app.R", por
   )
 
   scenarios <- jsonlite::fromJSON(glue::glue("{config$dir}/{scenarios_list_file}"), simplifyVector = FALSE)
+
+
+  if (!is.null(app_url)) {
+    modify_url <- function(x, url) {
+      x$url <- url
+      x
+    }
+    scenarios <- purrr::modify(scenarios, modify_url, url = app_url)
+  }
 
   if (!is.null(label)) {
     scenarios <- scenarios %>%
