@@ -163,7 +163,9 @@ run_scenarios <- function(label = NULL,
   writeLines(sprintf("module.exports = %s", jsonlite::toJSON(params, pretty = TRUE, auto_unbox = TRUE)),
              con = glue::glue("{config$dir}/config.js"))
   system(glue::glue("backstop {action} --configPath={config$dir}/config.js {reference_filter}"), wait = TRUE)
-  system(sprintf("kill -9 %s", pid))
+  if (!is.null(app_path)) {
+    system(sprintf("kill -9 %s", pid))
+  }
 
   if (display_report && action == "test") {
     open_report(config$dir)
