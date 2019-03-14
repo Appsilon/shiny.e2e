@@ -5,11 +5,9 @@
 \title{Define scenario basing on template}
 \usage{
 define_scenario(label, config_dir = getOption("config_dir", default =
-  default_config_dir),
-  url = glue::glue("http://127.0.0.1:{default_port}"),
-  onBeforeScript = NULL, cookiePath = NULL, referenceUrl = NULL,
-  readyEvent = NULL, readySelector = NULL, delay = 1000,
-  hideSelectors = NULL, removeSelectors = list(),
+  default_config_dir), onBeforeScript = NULL, cookiePath = NULL,
+  referenceUrl = NULL, readyEvent = NULL, readySelector = NULL,
+  delay = 1000, hideSelectors = NULL, removeSelectors = list(),
   onReadyScript = NULL, keyPressSelectors = NULL,
   hoverSelector = NULL, hoverSelectors = NULL, clickSelector = NULL,
   clickSelectors = NULL, postInteractionWait = NULL,

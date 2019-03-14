@@ -13,5 +13,6 @@ Imports: glue,
     jsonlite,
     yaml,
     shiny,
-    magrittr
+    magrittr,
+    httr
 SystemRequirements: BackstopJS (https://github.com/garris/BackstopJS)

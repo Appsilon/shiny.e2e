@@ -18,7 +18,7 @@ run_scenarios(label = NULL, action = "test", app_path = "app.R",
 
 \item{action}{"test" for performing test (default), "reference" for creating reference screenshot}
 
-\item{app_path}{Relative path for Shiny App directory (used only for scenarios testing local app)}
+\item{app_path}{Relative path or an url for Shiny App.}
 
 \item{port}{Port in which local Shiny App should be run.}
 
