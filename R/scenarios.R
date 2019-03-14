@@ -73,13 +73,44 @@ edit_scenario <- function(label, config_dir = getOption("config_dir", default = 
   file.edit(glue::glue("{config$dir}/engine_scripts/{label}.js"))
 }
 
+
+
+#' Check if string is a local path or url
+#'
+#' @param path Path or url
+#' @export
+path_is_local <- function(path) {
+  is.null(httr::parse_url(path)$hostname)
+}
+
+#' Add urls to scenarios
+#'
+#' @param scenarios A list with scenarios (read from json)
+#' @param app_path Relative path or an url for Shiny App.
+#' @param port Port in which local Shiny App should be run.
+#' @export
+add_urls_to_scenarios <- function(scenarios, app_path, port = default_port) {
+  if (path_is_local(app_path)) {
+    app_url <- glue::glue("http://{ getOption('shiny.host', '127.0.0.1') }:{ port }")
+  } else {
+    app_url <- app_path
+  }
+
+  add_url <- function(x, url) {
+    x$url <- url
+    x
+  }
+
+  purrr::modify(scenarios, add_url, url = app_url)
+}
+
+
 #' Perform test or create reference screenshot
 #'
 #' @param label Scenario id. If NULL then all defined scenarios are used.
 #' @param action "test" for performing test (default), "reference" for creating reference screenshot
-#' @param app_path Relative path for Shiny App directory (used only for scenarios testing local app)
+#' @param app_path Relative path or an url for Shiny App.
 #' @param port Port in which local Shiny App should be run.
-#' @param app_url External url of the Shiny App
 #' @param config_dir Relative path to structure config file (config.yaml) directory.
 #' @param dosplay_report If TRUE, test report will be opened.
 #' @param run_time Time in seconds needed for application run.
@@ -113,24 +144,8 @@ run_scenarios <- function(label = NULL,
     ci_report = glue::glue("{config$dir}/report/ci_report")
   )
 
-  scenarios <- jsonlite::fromJSON(glue::glue("{config$dir}/{scenarios_list_file}"), simplifyVector = FALSE)
-
-  path_is_local <- function(path) {
-    is.null(httr::parse_url(path)$hostname)
-  }
-
-  if (path_is_local(app_path)) {
-    app_url <- glue::glue("http://{ getOption('shiny.host', '127.0.0.1') }:{ port }")
-  } else {
-    app_url <- app_path
-  }
-
-  add_url <- function(x, url) {
-    x$url <- url
-    x
-  }
-  scenarios <- purrr::modify(scenarios, add_url, url = app_url)
-
+  scenarios <- jsonlite::fromJSON(glue::glue("{config$dir}/{scenarios_list_file}"), simplifyVector = FALSE) %>%
+    add_urls_to_scenarios(app_path = app_path, port = port)
 
   if (!is.null(label)) {
     scenarios <- scenarios %>%

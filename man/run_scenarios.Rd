@@ -5,25 +5,22 @@
 \title{Perform test or create reference screenshot}
 \usage{
 run_scenarios(label = NULL, action = "test", app_path = "app.R",
-  port = default_port, app_url = NULL,
-  config_dir = getOption("config_dir", default = default_config_dir),
-  display_report = FALSE, run_time = 30, viewports = list(list(name =
-  "mac_screen", width = 1920, height = 1080)), asyncCaptureLimit = 5,
-  engineFlags = list(), engine = "puppeteer",
-  engineOptions = list(ignoreHTTPSErrors = TRUE, headless = TRUE, args =
-  list("--no-sandbox", "--disable-setuid-sandbox")), report = list("CI"),
-  debug = FALSE)
+  port = default_port, config_dir = getOption("config_dir", default =
+  default_config_dir), display_report = FALSE, run_time = 30,
+  viewports = list(list(name = "mac_screen", width = 1920, height =
+  1080)), asyncCaptureLimit = 5, engineFlags = list(),
+  engine = "puppeteer", engineOptions = list(ignoreHTTPSErrors = TRUE,
+  headless = TRUE, args = list("--no-sandbox",
+  "--disable-setuid-sandbox")), report = list("CI"), debug = FALSE)
 }
 \arguments{
 \item{label}{Scenario id. If NULL then all defined scenarios are used.}
 
 \item{action}{"test" for performing test (default), "reference" for creating reference screenshot}
 
-\item{app_path}{Relative path for Shiny App directory (used only for scenarios testing local app)}
+\item{app_path}{Relative path or an url for Shiny App.}
 
 \item{port}{Port in which local Shiny App should be run.}
-
-\item{app_url}{External url of the Shiny App}
 
 \item{config_dir}{Relative path to structure config file (config.yaml) directory.}
 
