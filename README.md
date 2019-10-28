@@ -1,3 +1,5 @@
+Note: the tool is still in progress and not production ready.
+
 ## Installation of system requirements
 ```
 apt-get install -y curl gnupg bzip2 && \
